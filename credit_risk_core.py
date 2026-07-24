@@ -295,7 +295,9 @@ def one_hot_correlations(df: pd.DataFrame, target: str, top_n: int = 25) -> pd.D
     encoded[target] = y.to_numpy()
     correlations = encoded.corr(numeric_only=True)[target].drop(target).dropna()
     result = correlations.reindex(correlations.abs().sort_values(ascending=False).index)
-    return result.head(top_n).rename("Correlation").reset_index(names="Feature")
+    result = result.head(top_n).rename("Correlation")
+    result.index.name = "Feature"
+    return result.reset_index()
 
 
 def clean_dataset_for_download(df: pd.DataFrame) -> pd.DataFrame:
