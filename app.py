@@ -133,6 +133,7 @@ st.caption(
 
 with st.sidebar:
     st.header("Control Center")
+    st.caption("Build: 2026-07-24-pandas-fix-verified")
     data_source = st.radio(
         "Dataset source",
         ["Kaggle dataset", "Upload CSV"],
@@ -246,7 +247,9 @@ with overview_tab:
         st.plotly_chart(fig_target, width="stretch")
     with right:
         missing = data.isna().sum().sort_values(ascending=False)
-        missing = missing[missing > 0].rename("Missing values").reset_index(names="Feature")
+        missing = missing[missing > 0].rename("Missing values")
+        missing.index.name = "Feature"
+        missing = missing.reset_index()
         if missing.empty:
             st.success("No missing values were detected.")
         else:
